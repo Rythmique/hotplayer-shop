@@ -1,3 +1,57 @@
-<input id="mac" placeholder="MAC obligatoire ex: 00:1A:79:..." required>
-<input id="playlist" placeholder="Lien Xtream (optionnel) ex: http://host:port|user|pass">
-<p style="font-size:12px">Laisse vide si tu veux juste activer l'app. Tu pourras ajouter la playlist après.</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activation HotPlayer - Rythmique</title>
+<style>
+body { font-family: -apple-system, sans-serif; background: #0f0f0f; margin:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+.card { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align:center; }
+h2 { margin-top:0; }
+input, select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 12px; box-sizing: border-box; font-size: 16px; }
+button { width: 100%; padding: 16px; background: #00C851; color: white; border: 0; border-radius: 10px; font-weight: bold; font-size: 16px; cursor:pointer; }
+button:disabled { background: gray; }
+#msg { margin-top: 15px; font-weight: bold; min-height:20px; }
+small { color: #888; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="card">
+<h2>Activer mon abonnement</h2>
+<p><small>Entre ton adresse MAC HotPlayer</small></p>
+<input id="mac" placeholder="MAC ex: 00:1A:79:12:34:56">
+<input id="playlist" placeholder="Lien M3U / Xtream (optionnel)">
+<select id="plan">
+  <option value="1">1 An - 1 crédit</option>
+  <option value="2.5">À VIE - 2.5 crédits</option>
+</select>
+<button id="btn" onclick="activer()">ACTIVER MAINTENANT</button>
+<p id="msg"></p>
+</div>
+
+<script>
+async function activer(){
+  const mac = document.getElementById('mac').value.trim();
+  const playlist = document.getElementById('playlist').value.trim();
+  const plan = document.getElementById('plan').value;
+  const msg = document.getElementById('msg');
+  const btn = document.getElementById('btn');
+  
+  if(!mac){ msg.innerText="❌ Mets ton adresse MAC"; return; }
+  
+  btn.disabled=true; msg.innerText = "⏳ Activation en cours...";
+  
+  try {
+    const res = await fetch('/api/activate', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({mac, playlist, plan})
+    });
+    const data = await res.json();
+    msg.innerText = data.success ? "✅ Activé ! Redémarre ton app HotPlayer" : "❌ Erreur: "+data.error;
+  } catch(e){ msg.innerText="❌ Erreur réseau"; }
+  btn.disabled=false;
+}
+</script>
+</body>
+</html>
