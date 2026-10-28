@@ -1,24 +1,35 @@
 export default async function handler(req, res){
   const { mac, playlist } = req.body;
   if(!mac) return res.status(400).json({error:"MAC manquant"});
-
-  // 1. On active le MAC (1 an) - adapte selon leur doc
-  const activate = await fetch(`https://hotplayer.app/api/v1/reseller/activate/${mac}`, {
+  
+  const API_KEY = process.env.HOTPLAYER_API_KEY;
+  
+  // 1. Active le MAC
+  const activateRes = await fetch(`https://hotplayer.app/api/v1/reseller/activate/${mac}`, {
     method:'POST',
-    headers:{ 'X-API-KEY': process.env.HOTPLAYER_API_KEY }
+    headers:{ 'X-API-KEY': API_KEY }
   });
-
-  // 2. On ajoute la playlist
-  const addList = await fetch(`https://hotplayer.app/api/v1/reseller/add-playlists/${mac}`, {
-    method:'POST',
-    headers:{
-      'X-API-KEY': process.env.HOTPLAYER_API_KEY,
-      'Content-Type':'application/json'
-    },
-    body: JSON.stringify([{ name:"Ma Playlist", url: playlist }])
-  });
-
-  const result = await addList.json();
-  if(result.status === 'success') res.json({success:true});
-  else res.json({success:false, error: JSON.stringify(result)});
+  const activateData = await activateRes.json();
+  
+  // 2. Si le client a mis une playlist, on l'ajoute (sinon on s'arrête là)
+  if(playlist && playlist.length > 5){
+    // Gère les 2 formats : URL directe ou HOST|USER|PASS
+    let finalUrl = playlist;
+    if(playlist.includes('|')){
+       const [host, user, pass] = playlist.split('|');
+       finalUrl = `${host}:443|${user}|${pass}`; // format Xtream que HotPlayer aime
+    }
+    
+    await fetch(`https://hotplayer.app/api/v1/reseller/add-playlists/${mac}`, {
+      method:'POST',
+      headers:{ 'X-API-KEY': API_KEY, 'Content-Type':'application/json' },
+      body: JSON.stringify([{ name:"Playlist Auto", url: finalUrl }])
+    });
+  }
+  
+  if(activateData.status === 'success' || activateRes.ok){
+    return res.json({success:true});
+  } else {
+    return res.json({success:false, error: "Activation échouée, MAC déjà actif ?"});
+  }
 } 
