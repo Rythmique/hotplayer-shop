@@ -7,7 +7,8 @@
 <style>
 body{font-family:-apple-system,sans-serif;background:#0f0f0f;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:15px}
 .card{background:#fff;padding:26px;border-radius:18px;width:100%;max-width:410px;box-sizing:border-box;text-align:center}
-.logo{width:90px;height:90px;border-radius:20px;margin:0 auto 10px auto;display:block;box-shadow:0 4px 15px rgba(0,0,0,.2)}
+.logo-box{width:88px;height:88px;background:#0f0f0f;border-radius:20px;margin:0 auto 12px auto;display:flex;justify-content:center;align-items:center;font-size:48px;box-shadow:0 4px 15px rgba(0,0,0,.3);position:relative}
+.logo-box span{filter:drop-shadow(0 0 8px #ff6a00)}
 input,select{width:100%;padding:14px;border-radius:10px;border:1px solid #ddd;margin-bottom:12px;box-sizing:border-box;font-size:15px}
 label{font-size:11px;font-weight:bold;color:#666;display:block;text-align:left;margin-bottom:4px;margin-left:4px}
 .wave-btn{display:none;width:100%;padding:16px;background:#1DC4FF;color:#000;border:0;border-radius:12px;font-weight:900;font-size:16px;text-decoration:none;margin-top:8px}
@@ -20,7 +21,7 @@ label{font-size:11px;font-weight:bold;color:#666;display:block;text-align:left;m
 </head>
 <body>
 <div class="card">
-<img src="logo.png" alt="HotPlayer Logo" class="logo">
+<div class="logo-box"><span>🔥▶️</span></div>
 <h2 style="margin:5px 0 15px 0">Activation HotPlayer</h2>
 
 <label>NOM COMPLET</label><input id="nom" placeholder="Ex: Koffi Jean">
