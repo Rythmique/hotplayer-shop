@@ -1,0 +1,24 @@
+export default async function handler(req, res){
+  const { mac, playlist } = req.body;
+  if(!mac) return res.status(400).json({error:"MAC manquant"});
+
+  // 1. On active le MAC (1 an) - adapte selon leur doc
+  const activate = await fetch(`https://hotplayer.app/api/v1/reseller/activate/${mac}`, {
+    method:'POST',
+    headers:{ 'X-API-KEY': process.env.HOTPLAYER_API_KEY }
+  });
+
+  // 2. On ajoute la playlist
+  const addList = await fetch(`https://hotplayer.app/api/v1/reseller/add-playlists/${mac}`, {
+    method:'POST',
+    headers:{
+      'X-API-KEY': process.env.HOTPLAYER_API_KEY,
+      'Content-Type':'application/json'
+    },
+    body: JSON.stringify([{ name:"Ma Playlist", url: playlist }])
+  });
+
+  const result = await addList.json();
+  if(result.status === 'success') res.json({success:true});
+  else res.json({success:false, error: JSON.stringify(result)});
+} 
