@@ -1,35 +1,40 @@
 export default async function handler(req, res){
-  const { mac, playlist } = req.body;
+  if(req.method !== 'POST') return res.status(405).json({error:"Method not allowed"});
+  const { mac, playlist, plan } = req.body;
   if(!mac) return res.status(400).json({error:"MAC manquant"});
-  
+
   const API_KEY = process.env.HOTPLAYER_API_KEY;
+  const isLifetime = plan === "2.5" || plan === "2.5 crédits";
+
+  // 1. Activation - 1 an ou à vie selon le plan
+  // Note: Sur HotPlayer, l'activation à vie consomme 2.5 crédits automatiquement côté serveur
+  const activateUrl = `https://hotplayer.app/api/v1/reseller/activate/${mac}`;
   
-  // 1. Active le MAC
-  const activateRes = await fetch(`https://hotplayer.app/api/v1/reseller/activate/${mac}`, {
+  const activateRes = await fetch(activateUrl, {
     method:'POST',
-    headers:{ 'X-API-KEY': API_KEY }
+    headers:{ 'X-API-KEY': API_KEY, 'Content-Type':'application/json' },
+    body: JSON.stringify({ lifetime: isLifetime }) // si leur API gère le flag, sinon il déduira 2.5 tout seul si tu as activé à vie dans panel
   });
-  const activateData = await activateRes.json();
   
-  // 2. Si le client a mis une playlist, on l'ajoute (sinon on s'arrête là)
-  if(playlist && playlist.length > 5){
-    // Gère les 2 formats : URL directe ou HOST|USER|PASS
+  const activateData = await activateRes.json();
+
+  // 2. Ajoute playlist seulement si fournie
+  if(playlist && activateRes.ok){
     let finalUrl = playlist;
     if(playlist.includes('|')){
-       const [host, user, pass] = playlist.split('|');
-       finalUrl = `${host}:443|${user}|${pass}`; // format Xtream que HotPlayer aime
+       const parts = playlist.split('|');
+       if(parts.length === 3) finalUrl = `${parts[0]}|${parts[1]}|${parts[2]}`;
     }
-    
     await fetch(`https://hotplayer.app/api/v1/reseller/add-playlists/${mac}`, {
       method:'POST',
       headers:{ 'X-API-KEY': API_KEY, 'Content-Type':'application/json' },
       body: JSON.stringify([{ name:"Playlist Auto", url: finalUrl }])
     });
   }
-  
-  if(activateData.status === 'success' || activateRes.ok){
+
+  if(activateRes.ok || activateData.status === 'success'){
     return res.json({success:true});
   } else {
-    return res.json({success:false, error: "Activation échouée, MAC déjà actif ?"});
+    return res.json({success:false, error: activateData.message || JSON.stringify(activateData)});
   }
-} 
+}
