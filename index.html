@@ -50,14 +50,14 @@ const WAVE_AVIE="https://pay.wave.com/m/M_ci_zRdAK78v8F1I/c/ci/?amount=32000";
 const nomEl=document.getElementById('nom'),telEl=document.getElementById('tel'),macEl=document.getElementById('mac'),planEl=document.getElementById('plan'),waveBtn=document.getElementById('waveBtn'),waBtn=document.getElementById('waBtn'),price=document.getElementById('price'),msg=document.getElementById('msg');
 function isValidMac(mac){
  const clean=mac.trim().toUpperCase();
- const standardMac=/^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/;
- const customMac=/^[A-Z]{2}:[0-9A-F]{2}:[0-9A-F]{2,8}$/;
+ const standardMac=/^([0-9A-Z]{2}[:-]){5}([0-9A-Z]{2})$/;
+ const customMac=/^[A-Z]{2}:[0-9A-Z]{2}:[0-9A-Z]{2,8}$/;
  return standardMac.test(clean) || customMac.test(clean);
 }
 function check(){
  const nom=nomEl.value.trim(),tel=telEl.value.trim(),mac=macEl.value.trim().toUpperCase(),plan=planEl.value;
  if(!nom||!tel||!mac||!plan){waveBtn.style.display="none";waBtn.style.display="none";if(!plan)price.innerText="";return;}
- if(!isValidMac(mac)){msg.innerText="❌ MAC invalide. Ex: 00:1A:79:A1:B2:C3 ou JP:1A:OE9D6D83";waveBtn.style.display="none";waBtn.style.display="none";return;}
+ if(!isValidMac(mac)){msg.innerText="❌ MAC invalide. Ex: 00:1A:79:A1:B2:C3 ou JP:1A:OE:9D:6D:83";waveBtn.style.display="none";waBtn.style.display="none";return;}
  if(tel.length<8){msg.innerText="❌ Numéro invalide";return;}
  msg.innerText="";
  if(plan==="1_an"){price.innerText="À payer : 12 500F";waveBtn.href=WAVE_1AN;waveBtn.innerText="PAYER 12 500F VIA WAVE";}
