@@ -3,55 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Activation HotPlayer - Rythmique</title>
+<title>Activation HotPlayer</title>
 <style>
-body { font-family: -apple-system, sans-serif; background: #0f0f0f; margin:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
-.card { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align:center; }
-h2 { margin-top:0; }
-input, select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 12px; box-sizing: border-box; font-size: 16px; }
-button { width: 100%; padding: 16px; background: #00C851; color: white; border: 0; border-radius: 10px; font-weight: bold; font-size: 16px; cursor:pointer; }
-button:disabled { background: gray; }
-#msg { margin-top: 15px; font-weight: bold; min-height:20px; }
-small { color: #888; font-size: 12px; }
+body{font-family:-apple-system,sans-serif;background:#0f0f0f;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:15px}
+.card{background:#fff;padding:26px;border-radius:18px;width:100%;max-width:410px;box-sizing:border-box;text-align:center}
+.logo{width:90px;height:90px;border-radius:20px;margin:0 auto 10px auto;display:block;box-shadow:0 4px 15px rgba(0,0,0,.2)}
+input,select{width:100%;padding:14px;border-radius:10px;border:1px solid #ddd;margin-bottom:12px;box-sizing:border-box;font-size:15px}
+label{font-size:11px;font-weight:bold;color:#666;display:block;text-align:left;margin-bottom:4px;margin-left:4px}
+.wave-btn{display:none;width:100%;padding:16px;background:#1DC4FF;color:#000;border:0;border-radius:12px;font-weight:900;font-size:16px;text-decoration:none;margin-top:8px}
+.wa-btn{display:none;width:100%;padding:16px;background:#25D366;color:#fff;border:0;border-radius:12px;font-weight:900;font-size:15px;text-decoration:none;margin-top:10px}
+#msg{font-size:13px;color:#e74c3c;min-height:18px}
+#price{font-weight:900;font-size:17px;margin:10px 0}
+.footer{margin-top:20px;padding-top:15px;border-top:1px solid #eee;font-size:13px;line-height:1.6;color:#666}
+.footer a{color:#0084ff;font-weight:bold;text-decoration:none}
 </style>
 </head>
 <body>
 <div class="card">
-<h2>Activer mon abonnement</h2>
-<p><small>Entre ton adresse MAC HotPlayer</small></p>
-<input id="mac" placeholder="MAC ex: 00:1A:79:12:34:56">
-<input id="playlist" placeholder="Lien M3U / Xtream (optionnel)">
-<select id="plan">
-  <option value="1">1 An - 1 crédit</option>
-  <option value="2.5">À VIE - 2.5 crédits</option>
-</select>
-<button id="btn" onclick="activer()">ACTIVER MAINTENANT</button>
-<p id="msg"></p>
-</div>
+<img src="logo.png" alt="HotPlayer Logo" class="logo">
+<h2 style="margin:5px 0 15px 0">Activation HotPlayer</h2>
 
+<label>NOM COMPLET</label><input id="nom" placeholder="Ex: Koffi Jean">
+<label>TON NUMÉRO</label><input id="tel" placeholder="Ex: 0748296488">
+<label>ADRESSE MAC</label><input id="mac" placeholder="00:1A:79:XX:XX:XX">
+<label>DURÉE</label>
+<select id="plan">
+<option value="">-- Choisis --</option>
+<option value="1_an">1 An - 12 500 F</option>
+<option value="a_vie">À VIE - 32 000 F</option>
+</select>
+<p id="price"></p><p id="msg"></p>
+<a id="waveBtn" class="wave-btn" target="_blank"></a>
+<a id="waBtn" class="wa-btn" target="_blank">📲 ENVOYER SUR WHATSAPP</a>
+
+<div class="footer">
+Besoin d'aide ?<br>
+<a href="https://wa.me/message/JRAFEKGZ26ESM1" target="_blank">💬 WhatsApp: +225 0748296488</a><br>
+<a href="tel:+2250748296488">📞 +225 0748296488</a>
+</div>
+</div>
 <script>
-async function activer(){
-  const mac = document.getElementById('mac').value.trim();
-  const playlist = document.getElementById('playlist').value.trim();
-  const plan = document.getElementById('plan').value;
-  const msg = document.getElementById('msg');
-  const btn = document.getElementById('btn');
-  
-  if(!mac){ msg.innerText="❌ Mets ton adresse MAC"; return; }
-  
-  btn.disabled=true; msg.innerText = "⏳ Activation en cours...";
-  
-  try {
-    const res = await fetch('/api/activate', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({mac, playlist, plan})
-    });
-    const data = await res.json();
-    msg.innerText = data.success ? "✅ Activé ! Redémarre ton app HotPlayer" : "❌ Erreur: "+data.error;
-  } catch(e){ msg.innerText="❌ Erreur réseau"; }
-  btn.disabled=false;
+const TON_WA="2250748296488";
+const WAVE_1AN="https://pay.wave.com/m/M_ci_zRdAK78v8F1I/c/ci/?amount=12500";
+const WAVE_AVIE="https://pay.wave.com/m/M_ci_zRdAK78v8F1I/c/ci/?amount=32000";
+const nomEl=document.getElementById('nom'),telEl=document.getElementById('tel'),macEl=document.getElementById('mac'),planEl=document.getElementById('plan'),waveBtn=document.getElementById('waveBtn'),waBtn=document.getElementById('waBtn'),msg=document.getElementById('msg'),price=document.getElementById('price');
+function check(){
+ const nom=nomEl.value.trim(),tel=telEl.value.trim(),mac=macEl.value.trim().toUpperCase(),plan=planEl.value;
+ if(!nom||!tel||!mac||!plan){waveBtn.style.display="none";waBtn.style.display="none";if(!plan)price.innerText="";return;}
+ const macRegex=/^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/;
+ if(!macRegex.test(mac)){msg.innerText="❌ MAC invalide. Ex: 00:1A:79:A1:B2:C3";waveBtn.style.display="none";waBtn.style.display="none";return;}
+ if(tel.length<8){msg.innerText="❌ Numéro invalide";return;}
+ msg.innerText="";
+ if(plan==="1_an"){price.innerText="À payer : 12 500F";waveBtn.href=WAVE_1AN;waveBtn.innerText="PAYER 12 500F VIA WAVE";}
+ else{price.innerText="À payer : 32 000F";waveBtn.href=WAVE_AVIE;waveBtn.innerText="PAYER 32 000F VIA WAVE";}
+ waveBtn.style.display="block";
+ const dureeTxt=plan==="1_an"?"1 AN (12500F)":"A VIE (32000F)";
+ const text=`NOUVELLE COMMANDE HOTPLAYER%0A%0ANom: ${encodeURIComponent(nom)}%0ATel: ${tel}%0AMAC: ${mac}%0ADurée: ${dureeTxt}%0A%0AJe viens de payer Wave.`;
+ waBtn.href=`https://wa.me/${TON_WA}?text=${text}`;
+ waBtn.style.display="block";
 }
+nomEl.addEventListener('input',check);telEl.addEventListener('input',check);macEl.addEventListener('input',check);planEl.addEventListener('change',check);
 </script>
 </body>
 </html>
