@@ -3,72 +3,224 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Activation HotPlayer</title>
+<title>Rt_Streaming - Activation & Vente</title>
 <style>
-body{font-family:-apple-system,sans-serif;background:#0f0f0f;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;padding:15px}
-.card{background:#fff;padding:26px;border-radius:18px;width:100%;max-width:410px;box-sizing:border-box;text-align:center}
-.logo-box{width:88px;height:88px;background:#0f0f0f;border-radius:20px;margin:0 auto 12px auto;display:flex;justify-content:center;align-items:center;font-size:48px;box-shadow:0 4px 15px rgba(0,0,0,.3)}
-.logo-box span{filter:drop-shadow(0 0 8px #ff6a00)}
-input,select{width:100%;padding:14px;border-radius:10px;border:1px solid #ddd;margin-bottom:12px;box-sizing:border-box;font-size:15px}
+body{font-family:-apple-system,sans-serif;background:#0f0f0f;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;margin:0;padding:15px; padding-top: 65px;}
+.card{background:#fff;padding:26px;border-radius:18px;width:100%;max-width:430px;box-sizing:border-box;position:relative;text-align:center}
+.top-switch{position:fixed;top:12px;left:12px;background:#fff;border-radius:30px;padding:4px;display:flex;gap:4px;box-shadow:0 2px 10px rgba(0,0,0,.3);z-index:10}
+.top-switch button{border:0;padding:8px 14px;border-radius:20px;font-weight:800;font-size:12px;cursor:pointer;transition:.2s}
+.top-switch button.active{background:#0f0f0f;color:#fff}
+.top-switch button.inactive{background:transparent;color:#888}
+.logo-box{width:100%;min-height:88px;background:#0f0f0f;border-radius:20px;margin:0 auto 12px auto;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;box-shadow:0 4px 15px rgba(0,0,0,.3);padding:10px;box-sizing:border-box}
+.logo-box .big{font-size:26px;font-weight:900;letter-spacing:1px}
+.logo-box .sub{font-size:12px;opacity:.7;margin-top:4px}
+input,select{width:100%;padding:14px;border-radius:10px;border:1px solid #ddd;margin-bottom:12px;box-sizing:border-box;font-size:15px;display:block}
 label{font-size:11px;font-weight:bold;color:#666;display:block;text-align:left;margin-bottom:4px;margin-left:4px}
-.wave-btn{display:none;width:94%;padding:15px;background:#1DC4FF;color:#000;border:0;border-radius:12px;font-weight:900;font-size:16px;text-decoration:none;margin-top:8px}
-.wa-btn{display:none;width:94%;padding:15px;background:#25D366;color:#fff;border:0;border-radius:12px;font-weight:900;font-size:15px;text-decoration:none;margin-top:10px}
-#msg{font-size:13px;color:#e74c3c;min-height:18px}
-#price{font-weight:900;font-size:17px;margin:10px 0}
+.wave-btn,.wa-btn{width:100%;padding:16px;border:0;border-radius:12px;font-weight:900;font-size:15px;text-decoration:none;margin:10px 0 0 0;box-sizing:border-box;text-align:center;display:none}
+.wave-btn{background:#1DC4FF;color:#000}
+.wa-btn{background:#25D366;color:#fff}
+#msg,#msg2{font-size:13px;color:#e74c3c;min-height:18px}
+#price,#price2{font-weight:900;font-size:18px;margin:12px 0}
 .footer{margin-top:20px;padding-top:15px;border-top:1px solid #eee;font-size:13px;line-height:1.6;color:#666}
 .footer a{color:#0084ff;font-weight:bold;text-decoration:none}
+.hidden{display:none !important}
 </style>
 </head>
 <body>
-<div class="card">
-<div class="logo-box"><span>🔥▶️</span></div>
-<h2 style="margin:5px 0 15px 0">Activation HotPlayer</h2>
 
-<label>NOM COMPLET</label><input id="nom" placeholder="Ex: Koffi Jean">
-<label>VÔTRE NUMÉRO</label><input id="tel" placeholder="Ex: 0748296488">
-<label>ADRESSE MAC (vérifiez bien l'adresse que vous entrez)</label><input id="mac" placeholder="00:1A:79:XX:XX:XX">
-<label>DURÉE</label>
-<select id="plan">
-<option value="">-- Choisis --</option>
-<option value="1_an">1 An - 12 500 F</option>
-<option value="a_vie">À VIE - 32 000 F</option>
-</select>
-<p id="price"></p><p id="msg"></p>
-<a id="waveBtn" class="wave-btn" target="_blank"></a>
-<a id="waBtn" class="wa-btn" target="_blank">📲 ENVOYER SUR WHATSAPP</a>
+<div class="top-switch">
+  <button id="btnHot" class="active" onclick="switchSystem('hot')">🔥 HOTPLAYER</button>
+  <button id="btnVente" class="inactive" onclick="switchSystem('vente')">🛒 Rt_Streaming🇨🇮</button>
+</div>
 
-<div class="footer">
-Besoin d'aide ?<br>
-<a href="https://wa.me/message/JRAFEKGZ26ESM1" target="_blank">💬 WhatsApp: +225 0748296488</a><br>
-<a href="tel:+2250748296488">📞 +225 0748296488</a>
+<!-- SYSTEME 1 : HOTPLAYER -->
+<div id="systemHot" class="card">
+  <div class="logo-box"><div class="big">🔥▶️</div><div class="sub">HOTPLAYER</div></div>
+  <h2 style="margin:5px 0 15px 0">Activation HotPlayer</h2>
+  <label>NOM COMPLET</label><input id="nom" placeholder="Ex: Koffi Jean">
+  <label>TON NUMÉRO</label><input id="tel" placeholder="Ex: 0748296488">
+  <label>ADRESSE MAC</label><input id="mac" placeholder="JP:1A:OE:9D:6D:83">
+  <label>DURÉE</label>
+  <select id="plan">
+    <option value="">-- Choisis --</option>
+    <option value="1_an">1 An - 12 500 F</option>
+    <option value="a_vie">À VIE - 32 000 F</option>
+  </select>
+  <p id="price"></p><p id="msg"></p>
+  <a id="waveBtn" class="wave-btn" target="_blank"></a>
+  <a id="waBtn" class="wa-btn" target="_blank">📲 ENVOYER SUR WHATSAPP</a>
+  <div class="footer">
+    Besoin d'aide ?<br>
+    <a href="https://wa.me/message/JRAFEKGZ26ESM1" target="_blank">💬 WhatsApp: +225 0748296488</a><br>
+    <a href="tel:+2250748296488">📞 +225 0748296488</a>
+  </div>
 </div>
+
+<!-- SYSTEME 2 : VENTE Rt_Streaming -->
+<div id="systemVente" class="card hidden">
+  <div class="logo-box"><div class="big">Rt_Streaming🇨🇮</div><div class="sub">NETFLIX • DISNEY • IPTV</div></div>
+  <h2 style="margin:5px 0 15px 0">Vente Abonnement</h2>
+  
+  <label>TYPE</label>
+  <select id="typeVente" onchange="checkVenteType()">
+    <option value="">-- Abonnement / Réabonnement --</option>
+    <option value="abonnement">Abonnement</option>
+    <option value="reabonnement">Réabonnement</option>
+  </select>
+
+  <!-- BLOC ABONNEMENT -->
+  <div id="blocAbonnement" class="hidden">
+    <label>NOM</label><input id="vNom" placeholder="Ex: Koffi Jean">
+    <label>SERVICE</label>
+    <select id="vServiceAbo" onchange="checkVente()">
+      <option value="">-- NETFLIX / DISNEY / IPTV --</option>
+      <option value="NETFLIX">🎬 NETFLIX</option>
+      <option value="DISNEY">🏰 DISNEY</option>
+      <option value="IPTV">📺 IPTV</option>
+    </select>
+    <label>PÉRIPHÉRIQUE</label>
+    <select id="vDevice">
+      <option value="">-- Choisis --</option>
+      <option value="Téléphone">📱 Téléphone</option>
+      <option value="Tablette">📱 Tablette</option>
+      <option value="Ordinateur">💻 Ordinateur</option>
+      <option value="TV">📺 TV / Box</option>
+    </select>
+    <label>NUMÉRO WHATSAPP</label><input id="vTelAbo" placeholder="Ex: 0748296488">
+    <label>DURÉE</label>
+    <select id="vDureeAbo" onchange="checkVente()">
+      <option value="">-- Choisis la durée --</option>
+      <option value="1">1 Mois</option>
+      <option value="3">3 Mois</option>
+      <option value="6">6 Mois</option>
+      <option value="12">12 Mois</option>
+    </select>
+  </div>
+
+  <!-- BLOC REABONNEMENT -->
+  <div id="blocReabonnement" class="hidden">
+    <label>NOM DE LA PLAYLIST</label><input id="vPlaylist" placeholder="Ex: Ma Playlist IPTV">
+    <label>SERVICE</label>
+    <select id="vServiceReab" onchange="checkVente()">
+      <option value="">-- NETFLIX / DISNEY / IPTV --</option>
+      <option value="NETFLIX">🎬 NETFLIX</option>
+      <option value="DISNEY">🏰 DISNEY</option>
+      <option value="IPTV">📺 IPTV</option>
+    </select>
+    <label>NUMÉRO WHATSAPP</label><input id="vTelReab" placeholder="Ex: 0748296488">
+    <label>DURÉE</label>
+    <select id="vDureeReab" onchange="checkVente()">
+      <option value="">-- Choisis la durée --</option>
+      <option value="1">1 Mois</option>
+      <option value="3">3 Mois</option>
+      <option value="6">6 Mois</option>
+      <option value="12">12 Mois</option>
+    </select>
+  </div>
+
+  <p id="price2"></p><p id="msg2"></p>
+  <a id="waveBtn2" class="wave-btn" target="_blank"></a>
+  <a id="waBtn2" class="wa-btn" target="_blank">📲 ENVOYER SUR WHATSAPP</a>
+
+  <div class="footer">
+    Besoin d'aide ?<br>
+    <a href="https://wa.me/message/JRAFEKGZ26ESM1" target="_blank">💬 WhatsApp: +225 0748296488</a><br>
+    <a href="tel:+2250748296488">📞 +225 0748296488</a>
+  </div>
 </div>
+
 <script>
-const TON_WA="2250748296488";
-const WAVE_1AN="https://pay.wave.com/m/M_ci_zRdAK78v8F1I/c/ci/?amount=12500";
-const WAVE_AVIE="https://pay.wave.com/m/M_ci_zRdAK78v8F1I/c/ci/?amount=32000";
-const nomEl=document.getElementById('nom'),telEl=document.getElementById('tel'),macEl=document.getElementById('mac'),planEl=document.getElementById('plan'),waveBtn=document.getElementById('waveBtn'),waBtn=document.getElementById('waBtn'),price=document.getElementById('price'),msg=document.getElementById('msg');
-function isValidMac(mac){
- const clean=mac.trim().toUpperCase();
- const standardMac=/^([0-9A-Z]{2}[:-]){5}([0-9A-Z]{2})$/;
- const customMac=/^[A-Z]{2}:[0-9A-Z]{2}:[0-9A-Z]{2,8}$/;
- return standardMac.test(clean) || customMac.test(clean);
+const TON_WA_LINK="https://wa.me/message/JRAFEKGZ26ESM1";
+const WAVE_BASE="https://pay.wave.com/m/M_ci_zRdAK78v8F1I/c/ci/?amount=";
+
+// === MODIFIE LES PRIX ICI PAR SERVICE ===
+const TARIFS = {
+  "IPTV":    {1: 3500, 3: 9000, 6: 19000, 12: 34000},
+  "NETFLIX": {1: 3500, 3: 9000, 6: 19000, 12: 34000},
+  "DISNEY":  {1: 3500, 3: 9000, 6: 19000, 12: 34000}
+};
+
+function switchSystem(sys){
+  document.getElementById('systemHot').classList.toggle('hidden', sys!=='hot');
+  document.getElementById('systemVente').classList.toggle('hidden', sys!=='vente');
+  document.getElementById('btnHot').className = sys==='hot'?'active':'inactive';
+  document.getElementById('btnVente').className = sys==='vente'?'active':'inactive';
 }
-function check(){
+
+// --- HOTPLAYER ---
+const nomEl=document.getElementById('nom'),telEl=document.getElementById('tel'),macEl=document.getElementById('mac'),planEl=document.getElementById('plan'),waveBtn=document.getElementById('waveBtn'),waBtn=document.getElementById('waBtn'),msg=document.getElementById('msg'),price=document.getElementById('price');
+function checkHot(){
  const nom=nomEl.value.trim(),tel=telEl.value.trim(),mac=macEl.value.trim().toUpperCase(),plan=planEl.value;
  if(!nom||!tel||!mac||!plan){waveBtn.style.display="none";waBtn.style.display="none";if(!plan)price.innerText="";return;}
- if(!isValidMac(mac)){msg.innerText="❌ MAC invalide. Ex: 00:1A:79:A1:B2:C3 ou JP:1A:OE:9D:6D:83";waveBtn.style.display="none";waBtn.style.display="none";return;}
+ const macRegex=/^([0-9A-Z]{2}[:-]){5}([0-9A-Z]{2})$/;
+ if(!macRegex.test(mac)){msg.innerText="❌ MAC invalide. Format: XX:XX:XX:XX:XX:XX";waveBtn.style.display="none";waBtn.style.display="none";return;}
  if(tel.length<8){msg.innerText="❌ Numéro invalide";return;}
  msg.innerText="";
- if(plan==="1_an"){price.innerText="À payer : 12 500F";waveBtn.href=WAVE_1AN;waveBtn.innerText="PAYER 12 500F VIA WAVE";}
- else{price.innerText="À payer : 32 000F";waveBtn.href=WAVE_AVIE;waveBtn.innerText="PAYER 32 000F VIA WAVE";}
- waveBtn.style.display="block";
+ let amount= plan==="1_an"?12500:32000;
+ price.innerText="À payer : "+amount.toLocaleString()+"F";
+ waveBtn.href=WAVE_BASE+amount; waveBtn.innerText="PAYER "+amount.toLocaleString()+"F VIA WAVE"; waveBtn.style.display="block";
  const dureeTxt=plan==="1_an"?"1 AN (12500F)":"A VIE (32000F)";
  const text=`NOUVELLE COMMANDE HOTPLAYER%0A%0ANom: ${encodeURIComponent(nom)}%0ATel: ${tel}%0AMAC: ${mac}%0ADurée: ${dureeTxt}%0A%0AJe viens de payer Wave.`;
- waBtn.href=`https://wa.me/${TON_WA}?text=${text}`;
- waBtn.style.display="block";
+ waBtn.href=`https://wa.me/2250748296488?text=${text}`; waBtn.style.display="block";
 }
-nomEl.addEventListener('input',check);telEl.addEventListener('input',check);macEl.addEventListener('input',check);planEl.addEventListener('change',check);
+nomEl.addEventListener('input',checkHot);telEl.addEventListener('input',checkHot);macEl.addEventListener('input',checkHot);planEl.addEventListener('change',checkHot);
+
+// --- VENTE ---
+function checkVenteType(){
+  const type=document.getElementById('typeVente').value;
+  document.getElementById('blocAbonnement').classList.toggle('hidden', type!=='abonnement');
+  document.getElementById('blocReabonnement').classList.toggle('hidden', type!=='reabonnement');
+  checkVente();
+}
+
+function checkVente(){
+  const type=document.getElementById('typeVente').value;
+  const waveBtn2=document.getElementById('waveBtn2'), waBtn2=document.getElementById('waBtn2'), price2=document.getElementById('price2'), msg2=document.getElementById('msg2');
+  if(!type){waveBtn2.style.display="none";waBtn2.style.display="none";price2.innerText="";return;}
+
+  let nom="", device="", tel="", duree="", service="";
+  if(type==="abonnement"){
+    nom=document.getElementById('vNom').value.trim();
+    service=document.getElementById('vServiceAbo').value;
+    device=document.getElementById('vDevice').value;
+    tel=document.getElementById('vTelAbo').value.trim();
+    duree=document.getElementById('vDureeAbo').value;
+  } else {
+    nom=document.getElementById('vPlaylist').value.trim();
+    service=document.getElementById('vServiceReab').value;
+    tel=document.getElementById('vTelReab').value.trim();
+    duree=document.getElementById('vDureeReab').value;
+  }
+
+  if(!nom||!tel||!duree||!service || (type==="abonnement" && !device)){
+    waveBtn2.style.display="none"; waBtn2.style.display="none";
+    if(duree && service){} else {price2.innerText="";} return;
+  }
+  if(tel.length<8){msg2.innerText="❌ Numéro invalide";return;}
+  msg2.innerText="";
+
+  const amount = TARIFS[service][duree];
+  price2.innerText = service + " - À payer : " + amount.toLocaleString() + " F";
+  waveBtn2.href=WAVE_BASE+amount;
+  waveBtn2.innerText="PAYER "+amount.toLocaleString()+"F VIA WAVE";
+  waveBtn2.style.display="block";
+
+  let text="";
+  if(type==="abonnement"){
+    text=`NOUVELLE COMMANDE Rt_Streaming🇨🇮 - ABONNEMENT%0A%0ANom: ${encodeURIComponent(nom)}%0AService: ${service}%0APériphérique: ${encodeURIComponent(device)}%0ATel WhatsApp: ${tel}%0ADurée: ${duree} mois - ${amount}F%0A%0AJe viens de payer Wave.`;
+  } else {
+    text=`NOUVELLE COMMANDE Rt_Streaming🇨🇮 - REABONNEMENT%0A%0ANom Playlist: ${encodeURIComponent(nom)}%0AService: ${service}%0ATel WhatsApp: ${tel}%0ADurée: ${duree} mois - ${amount}F%0A%0AJe viens de payer Wave.`;
+  }
+  waBtn2.href=`${TON_WA_LINK}`;
+  // Pour envoyer les infos auto, utilise cette ligne à la place si tu veux :
+  waBtn2.href=`https://wa.me/2250748296488?text=${text}`;
+  waBtn2.style.display="block";
+}
+document.getElementById('vNom').addEventListener('input',checkVente);
+document.getElementById('vDevice').addEventListener('change',checkVente);
+document.getElementById('vTelAbo').addEventListener('input',checkVente);
+document.getElementById('vPlaylist').addEventListener('input',checkVente);
+document.getElementById('vTelReab').addEventListener('input',checkVente);
 </script>
 </body>
 </html>
