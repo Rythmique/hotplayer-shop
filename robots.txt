@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Autorise tout le monde
+Disallow:
+
+# Sitemaps pour Google
+Sitemap: https://rt-streaming.vercel.app/sitemap.xml
+Sitemap: https://rt-streaming-ci.vercel.app/sitemap.xml
